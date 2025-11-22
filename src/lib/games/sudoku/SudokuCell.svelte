@@ -17,7 +17,7 @@
 	tabindex="-1"
 	{onclick}
 	onkeydown={() => {}}
-	class={cn(['h-full w-full px-2.5 py-1 text-center focus-none', { 'bg-theme-sky-light': active }])}
+	class={cn(['size-full px-2.5 py-1 text-center focus-none', { 'bg-theme-sky-light': active }])}
 >
 	{value || ''}
 </div>

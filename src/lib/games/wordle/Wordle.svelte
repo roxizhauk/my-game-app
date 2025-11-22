@@ -3,6 +3,7 @@
 	import Toast from '$lib/components/AlertToast.svelte';
 	import MessageDialog from '$lib/components/MessageDialog.svelte';
 	import { getContext } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import { WordleGame } from './game.svelte';
 	import LetterSet from './LetterSet.svelte';
 	import Keyboard from './WordleKeyboard.svelte';
@@ -60,6 +61,7 @@
 	function handleNewGame() {
 		game = new WordleGame();
 		guess = '';
+		openDialog = false;
 	}
 
 	function setWord(word: string) {
@@ -90,12 +92,9 @@
 			return;
 		}
 	}
-
-	$effect(() => {
-		window.addEventListener('keydown', handleKeyDown);
-		return () => window.removeEventListener('keydown', handleKeyDown);
-	});
 </script>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <Toast bind:open={openAlert} {message} duration={2000} />
 <MessageDialog bind:open={openDialog}>
@@ -115,11 +114,12 @@
 	<div class="mx-auto grid grid-cols-5 gap-2">
 		{#each game.words as word, rowIndex}
 			{#each word as { letter, color }, colIndex}
-				{@const displayLetter = game.rowIndex === rowIndex ? guess[colIndex] || '' : letter}
 				<div
 					class={cn([
 						'flex h-14 w-14 items-center justify-center rounded border-4 font-mono text-3xl font-black select-none',
-						displayLetter ? 'border-theme-base' : 'border-theme-light',
+						game.rowIndex === rowIndex && guess[colIndex]
+							? 'border-theme-base'
+							: 'border-theme-light',
 						{
 							'border-none text-white': color !== undefined,
 							'bg-theme-dark': color === 0,
@@ -128,7 +128,17 @@
 						}
 					])}
 				>
-					{displayLetter}
+					{#if game.rowIndex === rowIndex}
+						{#if guess[colIndex]}
+							<span in:fade>
+								{guess[colIndex]}
+							</span>
+						{/if}
+					{:else}
+						<span>
+							{letter}
+						</span>
+					{/if}
 				</div>
 			{/each}
 		{/each}

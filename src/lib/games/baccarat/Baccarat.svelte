@@ -4,6 +4,7 @@
 	import ScoreBoard from './ScoreBoard.svelte';
 
 	const game = new BaccaratGame();
+	let isFlipped = $state(false);
 </script>
 
 <div class="flex flex-col gap-y-4 px-2">
@@ -11,6 +12,12 @@
 		<PlayField name="Player" hand={game.pHand} total={game.pTotal} result={game.pResult} />
 		<PlayField name="Banker" hand={game.bHand} total={game.bTotal} result={game.bResult} />
 	</div>
-	<button onclick={() => game.play()} class="btnx-primary mx-auto w-1/3">Play</button>
+	<div class="flex justify-center gap-x-2">
+		<button
+			disabled={game.isProcessing}
+			onclick={async () => await game.play()}
+			class="btnx-primary w-36">Play</button
+		>
+	</div>
 	<ScoreBoard score={game.score} deckCount={game.deck.deck.length} />
 </div>

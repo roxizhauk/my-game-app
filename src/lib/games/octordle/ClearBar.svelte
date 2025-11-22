@@ -1,16 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/cn';
-	let { isCleared }: { isCleared: boolean[] } = $props();
-
-	function scrollTo(index: number) {
-		const boardElement = document.getElementById(`w${index}`);
-		if (boardElement) {
-			boardElement.scrollIntoView({
-				behavior: 'smooth', // スムーズなスクロール
-				block: 'start' // 要素の上端がビューポートの上端に揃うようにスクロール
-			});
-		}
-	}
+	let { isCleared, scrollTo }: { isCleared: boolean[]; scrollTo: (index: number) => void } =
+		$props();
 </script>
 
 <div class="flex w-full gap-1 select-none">

@@ -35,9 +35,7 @@
 		<HouseIcon />
 	</a>
 	<Dialog>
-		<Dialog.Trigger
-			class="cursor-pointer text-theme-base focus-none focus:ring-2 focus:ring-pink-400"
-		>
+		<Dialog.Trigger class="cursor-pointer text-theme-base focus-none">
 			<MenuIcon />
 		</Dialog.Trigger>
 		<Portal>

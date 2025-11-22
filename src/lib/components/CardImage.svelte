@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { cn } from '$lib/cn';
 	import type { Card } from '$lib/deck';
 	import SuitIcon from './SuitIcon.svelte';
 
 	const { card }: { card?: Card } = $props();
+	let isFlipped = $state(false);
 
 	function genValChar(value: number) {
 		switch (value) {
@@ -20,43 +22,57 @@
 	}
 </script>
 
-<div
-	class={[
-		'relative flex h-20 w-1/3 items-center justify-center rounded p-1 font-mono drop-shadow sm:h-32 sm:p-1.5',
-		card ? 'bg-theme-white' : 'bg-theme-light'
-	]}
->
-	{#if card}
-		<div class="flex h-full w-full flex-col justify-between">
+<div class="h-20 w-1/3 sm:h-32">
+	<div class="size-full perspective-distant">
+		<div
+			class={cn([
+				'relative size-full transform-3d',
+				{
+					'rotate-y-180 transition duration-1000': card
+				}
+			])}
+		>
+			<!-- Back Side -->
 			<div
-				class={[
-					{
-						'text-theme-red': card.suit === 'heart' || card.suit == 'diamond'
-					}
-				]}
-			>
-				<SuitIcon suit={card.suit} />
-			</div>
+				class="absolute inset-0 size-full rounded bg-theme-green drop-shadow backface-hidden"
+			></div>
+
+			<!-- Front Side -->
 			<div
-				class={[
-					'flex items-center justify-center sm:text-4xl',
-					{
-						'text-theme-red': card.suit === 'heart' || card.suit == 'diamond'
-					}
-				]}
+				class="absolute inset-0 flex size-full rotate-y-180 flex-col justify-between rounded bg-theme-white p-1 drop-shadow backface-hidden sm:p-2"
 			>
-				{genValChar(card.value)}
-			</div>
-			<div
-				class={[
-					'rotate-180',
-					{
-						'text-theme-red': card.suit === 'heart' || card.suit == 'diamond'
-					}
-				]}
-			>
-				<SuitIcon suit={card.suit} />
+				{#if card}
+					<div
+						class={[
+							{
+								'text-theme-red': card.suit === 'heart' || card.suit == 'diamond'
+							}
+						]}
+					>
+						<SuitIcon suit={card.suit} />
+					</div>
+					<div
+						class={[
+							'flex items-center justify-center text-xl sm:text-4xl',
+							{
+								'text-theme-red': card.suit === 'heart' || card.suit == 'diamond'
+							}
+						]}
+					>
+						{genValChar(card.value)}
+					</div>
+					<div
+						class={[
+							'rotate-180',
+							{
+								'text-theme-red': card.suit === 'heart' || card.suit == 'diamond'
+							}
+						]}
+					>
+						<SuitIcon suit={card.suit} />
+					</div>
+				{/if}
 			</div>
 		</div>
-	{/if}
+	</div>
 </div>

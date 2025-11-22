@@ -43,6 +43,7 @@
 	function handleNewGame() {
 		game = new OctordleGame();
 		guess = '';
+		openDialog = false;
 	}
 
 	function handleKeyDown(e: KeyboardEvent) {
@@ -68,13 +69,25 @@
 			guess += pressedKey.toUpperCase();
 			return;
 		}
+
+		if (/^[1-8]$/.test(pressedKey)) {
+			scrollTo(parseInt(pressedKey));
+			return;
+		}
 	}
 
-	$effect(() => {
-		window.addEventListener('keydown', handleKeyDown);
-		return () => window.removeEventListener('keydown', handleKeyDown);
-	});
+	function scrollTo(index: number) {
+		const boardElement = document.getElementById(`w${index}`);
+		if (boardElement) {
+			boardElement.scrollIntoView({
+				behavior: 'smooth', // スムーズなスクロール
+				block: 'start' // 要素の上端がビューポートの上端に揃うようにスクロール
+			});
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <Toast bind:open={openAlert} {message} duration={2000} />
 <MessageDialog bind:open={openDialog}>
@@ -126,7 +139,7 @@
 <div
 	class="fixed bottom-0 z-10 flex w-full flex-col items-center justify-center gap-y-1 bg-theme-white/80 p-1 sm:max-w-2xl sm:p-2"
 >
-	<ClearBar isCleared={game.isCleared} />
+	<ClearBar isCleared={game.isCleared} {scrollTo} />
 	<Keyboard
 		bind:guess
 		keyColors={game.keyColors}

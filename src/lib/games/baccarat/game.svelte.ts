@@ -1,8 +1,10 @@
 import { Deck, type Card } from '$lib/deck';
 
+const sec = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms * 1000));
+
 export type { Card };
 export type PlayerResult = 'WIN' | 'LOSE' | 'DRAW' | undefined;
-export type Winner = 'PLAYER' | 'BANKER' | 'DRAW';
+export type Winner = 'PLAYER' | 'BANKER' | 'DRAW' | undefined;
 export type Score = Winner[][];
 export class BaccaratGame {
 	deckCount: number;
@@ -13,8 +15,9 @@ export class BaccaratGame {
 	bHand = $state<Card[]>([]);
 	bTotal = $state<number>(0);
 	bResult = $state<PlayerResult>();
-	winner = $state<Winner>('DRAW');
+	winner = $state<Winner>();
 	score = $state<Score>([]);
+	isProcessing = $state<boolean>(false);
 
 	constructor(deckCount = 8) {
 		this.deckCount = deckCount;
@@ -30,9 +33,16 @@ export class BaccaratGame {
 		return total % 10;
 	}
 
-	private dealInitialHands() {
+	private async dealInitialHands() {
 		this.pHand = [];
+		this.pTotal = 0;
+		this.pResult = undefined;
 		this.bHand = [];
+		this.bTotal = 0;
+		this.bResult = undefined;
+		this.winner = undefined;
+
+		await sec(1);
 		this.pHand.push(this.deck.drawCard());
 		this.bHand.push(this.deck.drawCard());
 		this.pHand.push(this.deck.drawCard());
@@ -59,14 +69,7 @@ export class BaccaratGame {
 		}
 	}
 
-	private checkForReinitialize() {
-		if (this.deck.deck.length < 6) {
-			this.deck = new Deck(this.deckCount);
-			this.score = [];
-		}
-	}
-
-	private result() {
+	private getResult() {
 		if (this.pTotal === this.bTotal) {
 			this.winner = 'DRAW';
 			this.pResult = 'DRAW';
@@ -80,9 +83,7 @@ export class BaccaratGame {
 			this.pResult = 'LOSE';
 			this.bResult = 'WIN';
 		}
-	}
 
-	private updateScore() {
 		if (this.score.length === 0) {
 			this.score = [[this.winner]];
 			return;
@@ -97,9 +98,19 @@ export class BaccaratGame {
 		this.score = [...this.score, [this.winner]]; // カラムの勝者と異なる場合は、新しいカラムを作成
 	}
 
-	public play() {
+	private checkForReinitialize() {
+		if (this.deck.deck.length < 6) {
+			this.deck = new Deck(this.deckCount);
+			this.score = [];
+		}
+	}
+
+	public async play() {
+		this.isProcessing = true;
 		this.checkForReinitialize();
-		this.dealInitialHands();
+
+		await this.dealInitialHands();
+
 		if (!this.checkForNaturalWin()) {
 			if (this.shouldPlayerDrawCard()) {
 				const newCard = this.deck.drawCard();
@@ -112,7 +123,9 @@ export class BaccaratGame {
 				this.bTotal = this.calcHand(this.bHand);
 			}
 		}
-		this.result();
-		this.updateScore();
+
+		await sec(1);
+		this.getResult();
+		this.isProcessing = false;
 	}
 }

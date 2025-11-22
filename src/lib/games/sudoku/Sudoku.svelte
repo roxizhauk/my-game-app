@@ -86,15 +86,12 @@
 	}
 
 	$effect(() => {
-		window.addEventListener('keydown', handleKeyDown);
-		return () => window.removeEventListener('keydown', handleKeyDown);
-	});
-
-	$effect(() => {
 		if (!game) return;
 		saveLS('sudoku:inputs', game.inputs);
 	});
 </script>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <div class="flex h-screen items-center justify-center focus-none">
 	{#if game}
@@ -105,12 +102,14 @@
 						<SudokuFrame {row} {col}>
 							{#if game.puzzle[row][col] !== 0}
 								<div
-									class="flex h-full w-full items-center justify-center bg-theme-light px-2.5 py-1 focus-none"
+									class="flex size-full items-center justify-center bg-theme-light px-2.5 py-1 focus-none"
 								>
 									{game.puzzle[row][col]}
 								</div>
 							{:else if check[row][col]}
-								<div class="h-full w-full bg-theme-green px-2.5 py-1 text-center focus-none">
+								<div
+									class="size-full bg-theme-green px-2.5 py-1 text-center text-theme-white focus-none"
+								>
 									{game.inputs[row][col]}
 								</div>
 							{:else}
