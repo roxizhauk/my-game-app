@@ -1,6 +1,5 @@
 import { gen2d } from '$lib';
-import answerWords from '$lib/data/answer-words.json';
-import validWords from '$lib/data/valid-words.json';
+import { answerWords, validWords } from '$lib/words';
 import { SvelteSet } from 'svelte/reactivity';
 
 export type Status = 0 | 1 | 2; // 0: 灰 (不正解), 1: 黄 (場所違い), 2: 緑 (正解)
@@ -53,7 +52,7 @@ export class OctordleGame {
 	}
 
 	private validateWord(guess: string): boolean {
-		return validWords.indexOf(guess) !== -1;
+		return validWords.has(guess);
 	}
 
 	private validateGuess(guess: string): Letter[][] {
