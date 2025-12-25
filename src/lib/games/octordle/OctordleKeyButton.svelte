@@ -18,8 +18,9 @@
 		'btnx h-8 w-full btnx-transition rounded text-xs font-bold focus-none sm:h-11 sm:text-lg',
 		{
 			'bg-theme-light': status === undefined,
-			'bg-theme-dark text-theme-white': status === 0,
-			'bg-theme-base': status === 2 || status === 1
+			'bg-theme-midnight text-white': status === 0,
+			'bg-theme-yellow': status === 1,
+			'bg-theme-green': status === 2
 		},
 		{
 			'text-xs sm:text-sm': key === 'Enter',

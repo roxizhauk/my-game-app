@@ -6,6 +6,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 @theme {
+	--color-theme-midnight: light-dark(var(--color-slate-500), var(--color-slate-900));
 	--color-theme-dark: light-dark(var(--color-slate-500), var(--color-slate-500));
 	--color-theme-base: light-dark(var(--color-slate-400), var(--color-slate-600));
 	--color-theme-light: light-dark(var(--color-slate-300), var(--color-slate-700));

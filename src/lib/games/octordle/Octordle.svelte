@@ -106,7 +106,7 @@
 <div class="flex flex-col gap-y-9 pb-36 sm:pb-48">
 	<div class="mx-auto grid grid-cols-2 gap-4">
 		{#each game.wordles as wordle, index}
-			<div aria-label="Wordle" id={`w${index}`} class="mx-auto grid grid-cols-5 gap-1">
+			<div aria-label="Wordle" id={`w${index + 1}`} class="mx-auto grid grid-cols-5 gap-1">
 				{#each wordle as word, rowIndex}
 					{#each word as { letter, color }, colIndex}
 						{@const displayLetter =
