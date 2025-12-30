@@ -1,0 +1,16 @@
+{
+	"files.exclude": {
+		".npmrc": true,
+		".prettierrc": true,
+		".prettierignore": true,
+		"eslint.config.js": true,
+		"svelte.config.js": true,
+		"tsconfig.json": true,
+		"README.md": true,
+		"vite.config.ts": true,
+		"pnpm-lock.yaml": true,
+		"pnpm-workspace.yaml": true,
+		"wrangler.jsonc": true,
+		"worker-configuration.d.ts": true
+	}
+}
